@@ -322,21 +322,21 @@ var TableComp = React.createClass({
 
 var TableSortComp = React.createClass({
   getInitialState: function() {
-    return {className: "sort-icon glyphicon glyphicon-sort", sort: ""};
+    return {className: "pull-right glyphicon glyphicon-sort", sort: ""};
   },
   handleClick: function() {
     this.props.onClick(this.props.sort);
     this.setState({
       className: this.state.sort ?
-      "sort-icon glyphicon glyphicon-sort-by-attributes-alt" :
-      "sort-icon glyphicon glyphicon-sort-by-attributes",
+      "pull-right glyphicon glyphicon-sort-by-attributes-alt" :
+      "pull-right glyphicon glyphicon-sort-by-attributes",
       sort: this.state.sort ? "" : this.props.sort
     });
   },
   componentWillUpdate: function() {
     // Reset className and sort to default before rerender 
     // (not when parent render this component again)
-    this.state.className = "sort-icon glyphicon glyphicon-sort";
+    this.state.className = "pull-right glyphicon glyphicon-sort";
     this.state.sort = "";
   },
   render: function() {
