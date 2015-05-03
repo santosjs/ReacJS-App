@@ -81,7 +81,8 @@ var FormComp = React.createClass({
       lastName: "",
       phoneNumber: "",
       age: "",
-      gender: "Male"
+      gender: "Male",
+      errorMessage: "Check the correctness of the data entry"
     }
   },
   handleFirstName: function(e) {
@@ -165,6 +166,7 @@ var FormComp = React.createClass({
   },
   render: function() {
     var valid = this.validate(this.state);
+    var error = this.state.errorMessage;
 
     return (
       <form onSubmit={this.handleSubmit} className="form-horizontal" autoComplete="off">
@@ -177,8 +179,11 @@ var FormComp = React.createClass({
               valid={valid.firstName}
               startValid={this.state.startValid.firstName}
               value={this.state.firstName}
-              id="firstName"
-              placeholder="First Name" />
+              id="firstName" />
+            {
+              !valid.firstName && this.state.startValid.firstName ?
+              <span className="help-block">{error}</span> : null
+            }
           </div>
         </div>
         <div className="form-group">
@@ -190,8 +195,11 @@ var FormComp = React.createClass({
               valid={valid.lastName}
               startValid={this.state.startValid.lastName}
               value={this.state.lastName}
-              id="lastName"
-              placeholder="Last Name" />
+              id="lastName" />
+            {
+              !valid.lastName && this.state.startValid.lastName ?
+              <span className="help-block">{error}</span> : null
+            }
           </div>
         </div>
         <div className="form-group">
@@ -203,8 +211,11 @@ var FormComp = React.createClass({
               valid={valid.phoneNumber}
               startValid={this.state.startValid.phoneNumber}
               value={this.state.phoneNumber}
-              id="phoneNumber"
-              placeholder="Phone Number" />
+              id="phoneNumber" />
+            {
+              !valid.phoneNumber && this.state.startValid.phoneNumber ?
+              <span className="help-block">{error}</span> : null
+            }
           </div>
         </div>
         <div className="form-group">
@@ -216,9 +227,12 @@ var FormComp = React.createClass({
               valid={valid.age}
               startValid={this.state.startValid.age}
               value={this.state.age}
-              id="age"
-              placeholder="Age" />
+              id="age" />
           </div>
+          {
+            !valid.age && this.state.startValid.age ?
+            <span className="help-block">{error}</span> : null
+          }
         </div>
         <div className="form-group">
           <label htmlFor="gender" className="col-sm-2 control-label">Gender</label>
