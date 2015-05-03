@@ -8,6 +8,7 @@ The app uses an in-browser JSX Transformer, therefore, the code cannot be run wi
 
 ```bash
 npm install
+npm start
 http-server
 ```
 
