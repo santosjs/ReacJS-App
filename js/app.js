@@ -1,7 +1,8 @@
 /** @jsx React.DOM */
+
 App = React.createClass({
   getInitialState: function() {
-    return { 
+    return {
       tableRows: this.props.data || [],
       sortParam: ""
      };
@@ -10,6 +11,7 @@ App = React.createClass({
     var index = -1;
     var rows = this.state.tableRows;
 
+    // Find row to remove
     for (var i = 0; i < rows.length; i++) {
       if (row.num === rows[i].num) {
         index = i;
@@ -29,9 +31,16 @@ App = React.createClass({
     var dir = (sortParam == this.state.sortParam) ? -1 : 1;
     var rows = this.state.tableRows;
 
+    // Sort by column
     rows.sort(function(a,b) {
-      if(a[sortParam] < b[sortParam]) return -dir;
-      if(a[sortParam] > b[sortParam]) return dir;
+      var x = a[sortParam];
+      var y = b[sortParam];
+      if (typeof x === "string") { /* ignore case sensitivity */
+        x = x.toLowerCase();
+        y = y.toLowerCase();
+      }
+      if(x < y) return -dir;
+      if(x > y) return dir;
       return 0;
     });
 
@@ -51,6 +60,7 @@ App = React.createClass({
         </div>
         <FormComp onAddRow={this.handleAddRow} />
         {
+          // Don't show the table if tableRows have no data
           this.state.tableRows.length > 0 ?
           <TableComp 
             rows={this.state.tableRows}
@@ -65,6 +75,7 @@ App = React.createClass({
 var FormComp = React.createClass({
   getInitialState: function() {
     return {
+      // Don't start validation until input field is empty
       startValid: {firstName: false, lastName: false, phoneNumber: false, age: false},
       firstName: "",
       lastName: "",
@@ -101,15 +112,18 @@ var FormComp = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     var valid = this.validate(this.state);
-    var error = true;
+    var error = false;
+
+    // Check all input field
     for (var prop in valid) {
       if (!valid[prop]) {
-        error = false;
+        error = true;
         break;
       }
     }
 
-    if (error) {
+    // Add data to the table if there are no errors
+    if (!error) {
       var st = this.state;
       var row = {
         firstName: st.firstName,
@@ -129,7 +143,7 @@ var FormComp = React.createClass({
       st.phoneNumber = "";
       st.age = "";
       st.gender = "Male";
-      this.forceUpdate();
+      this.forceUpdate(); /* rerender with dafault fields */
     } else {
       this.state.startValid = {firstName: true, lastName: true, phoneNumber: true, age: true},
       this.forceUpdate();
@@ -140,8 +154,7 @@ var FormComp = React.createClass({
       firstName: /^( ?)*[a-z]{1,20}([ .'-]?[a-z]{1,20}){0,3}( ?)*$/i.test(state.firstName),
       lastName: /^( ?)*[a-z]{1,20}([ .'-]?[a-z]{1,20}){0,3}( ?)*$/i.test(state.lastName),
       phoneNumber: /^( ?)*(\+)?([0-9] ?){5,14}( ?)*$/i.test(state.phoneNumber),
-      age: /^([1-9]|[1-9][0-9]|1[0-3][0-9])$/i.test(state.age),
-      gender: /^(Male|Female)$/i.test(state.gender)
+      age: /^([1-9]|[1-9][0-9]|1[0-3][0-9])$/i.test(state.age) /* age range 1-139 */
     };
   },
   handleBlur: function(id) {
@@ -227,28 +240,10 @@ var FormComp = React.createClass({
 });
 
 var FormInputComp = React.createClass({
-  getInitialState: function(){
-    return { validationStarted: false };
-  },
-  componentWillMount: function(){
-    var startValidation = function(){
-      this.setState({
-        validationStarted: true
-      })
-    }.bind(this);
-
-    if (this.props.value) {
-      startValidation();
-    }
-  },
   handleChange: function(e) {
-    //this.setState({ value: e.target.value })
     this.props.onChange(e);
   },
   handleBlur: function() {
-    if (!this.state.validationStarted) {
-      this.state.validationStarted = true;
-    }
     this.props.onBlur(this.props.id);
   },  
   render: function() {
@@ -288,6 +283,7 @@ var TableComp = React.createClass({
     this.props.rows.map(function(row) {
       number++;
       row.num = number;
+      // Identity each child by assigning it a "key"
       rows.push(<TableRow key={row.num} row={row} onRemove={self.handleRowRemove} />);
     });
 
@@ -324,7 +320,10 @@ var TableSortComp = React.createClass({
     });
   },
   componentWillUpdate: function() {
+    // Reset className and sort to default before rerender 
+    // (not when parent render this component again)
     this.state.className = "sort-icon glyphicon glyphicon-sort";
+    this.state.sort = "";
   },
   render: function() {
     return (
@@ -356,6 +355,7 @@ var data = [
   {firstName: "Peter", lastName: "Parker", phoneNumber: 380916817294, age: 25, gender: "Male"},
   {firstName: "Bruce", lastName: "Wayne", phoneNumber: 85637611332, age: 41, gender: "Male"},
   {firstName: "Natalia", lastName: "Romanova", phoneNumber: 8432475384, age: 27, gender: "Female"}
-]
+];
 
+// Run App component with dafault user data
 React.render(<App data={data}/>, document.getElementById("app"));
