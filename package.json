@@ -1,0 +1,11 @@
+{
+  "name":"reactjs-app",
+  "version":"0.0.1",
+  "description":"An example of simple app made on ReactJS",
+  "author":"Alex <snts89@gmail.com>",
+  "devDependencies": {
+    "react": "~0.13.2",
+    "bootstrap": "^3.3.4",
+    "http-server": "^0.8.0"
+  }
+}
