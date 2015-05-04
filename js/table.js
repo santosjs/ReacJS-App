@@ -1,6 +1,8 @@
 "use script";
 
 var React = require('react');
+var TableSortComp = require('../js/tablesort');
+var TableRowComp = require('../js/tablerow');
 
 var TableComp = React.createClass({
   handleRowRemove: function(row) {
@@ -18,7 +20,7 @@ var TableComp = React.createClass({
       number++;
       row.num = number;
       // Identity each child by assigning it a "key"
-      rows.push(<TableRow key={row.num} row={row} onRemove={self.handleRowRemove} />);
+      rows.push(<TableRowComp key={row.num} row={row} onRemove={self.handleRowRemove} />);
     });
 
     return (
@@ -36,51 +38,6 @@ var TableComp = React.createClass({
         </thead>
         <tbody>{rows}</tbody>
       </table>
-    )
-  }
-});
-
-var TableSortComp = React.createClass({
-  getInitialState: function() {
-    return {className: "pull-right glyphicon glyphicon-sort", sort: ""};
-  },
-  handleClick: function() {
-    this.props.onClick(this.props.sort);
-    this.setState({
-      className: this.state.sort ?
-      "pull-right glyphicon glyphicon-sort-by-attributes-alt" :
-      "pull-right glyphicon glyphicon-sort-by-attributes",
-      sort: this.state.sort ? "" : this.props.sort
-    });
-  },
-  componentWillUpdate: function() {
-    // Reset className and sort to default before rerender 
-    // (not when parent render this component again)
-    this.state.className = "pull-right glyphicon glyphicon-sort";
-    this.state.sort = "";
-  },
-  render: function() {
-    return (
-      <span className={this.state.className} onClick={this.handleClick}></span>
-    )
-  }
-});
-
-var TableRow = React.createClass({
-  handleRowRemove: function() {
-    this.props.onRemove(this.props.row);
-  },
-  render: function() {
-    return (
-      <tr>
-        <td>{this.props.row.num}</td>
-        <td>{this.props.row.firstName}</td>
-        <td>{this.props.row.lastName}</td>
-        <td>{this.props.row.phoneNumber}</td>
-        <td>{this.props.row.age}</td>
-        <td>{this.props.row.gender}</td>
-        <td><input type="button" className="btn btn-danger btn-xs" value="Delete" onClick={this.handleRowRemove} /></td>
-      </tr>
     )
   }
 });

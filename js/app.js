@@ -3,7 +3,7 @@ var React = require('react');
 var FormComp = require('../js/form');
 var TableComp = require('../js/table');
 
-App = React.createClass({
+var App = React.createClass({
   getInitialState: function() {
     return {
       tableRows: this.props.data || [],

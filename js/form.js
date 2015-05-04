@@ -1,5 +1,7 @@
 "use strict";
+
 var React = require('react');
+var FormInputComp = require('../js/forminput');
 
 var FormComp = React.createClass({
   getInitialState: function() {
@@ -12,32 +14,32 @@ var FormComp = React.createClass({
       age: "",
       gender: "Male",
       errorMessage: "Check the correctness of the data entry"
-    }
+    };
   },
   handleFirstName: function(e) {
     this.setState({
       firstName: e.target.value
-    })
+    });
   },
   handleLastName: function(e) {
     this.setState({
       lastName: e.target.value
-    })
+    });
   },
   handlePhoneNumber: function(e) {
     this.setState({
       phoneNumber: e.target.value
-    })
+    });
   },
   handleAge: function(e) {
     this.setState({
       age: e.target.value.trim()
-    })
+    });
   },
   handleGender: function(e) {
     this.setState({
       gender: e.target.value
-    })
+    });
   },
   handleSubmit: function(e) {
     e.preventDefault();
@@ -58,10 +60,10 @@ var FormComp = React.createClass({
       var row = {
         firstName: st.firstName,
         lastName: st.lastName,
-        phoneNumber: st.phoneNumber,
-        age: st.age,
+        phoneNumber: parseInt(st.phoneNumber, 10),
+        age: parseInt(st.age, 10),
         gender: st.gender
-      }
+      };
       this.props.onAddRow(row);
 
       st.startValid.firstName = false;
@@ -75,7 +77,7 @@ var FormComp = React.createClass({
       st.gender = "Male";
       this.forceUpdate(); /* rerender with dafault fields */
     } else {
-      this.state.startValid = {firstName: true, lastName: true, phoneNumber: true, age: true},
+      this.state.startValid = {firstName: true, lastName: true, phoneNumber: true, age: true};
       this.forceUpdate();
     }
   },
@@ -83,7 +85,7 @@ var FormComp = React.createClass({
     return {
       firstName: /^( ?)*[a-z]{1,20}([ .'-]?[a-z]{1,20}){0,3}( ?)*$/i.test(state.firstName),
       lastName: /^( ?)*[a-z]{1,20}([ .'-]?[a-z]{1,20}){0,3}( ?)*$/i.test(state.lastName),
-      phoneNumber: /^( ?)*(\+)?([0-9] ?){5,14}( ?)*$/i.test(state.phoneNumber),
+      phoneNumber: /^( ?)*([0-9] ?){5,14}( ?)*$/i.test(state.phoneNumber),
       age: /^([1-9]|[1-9][0-9]|1[0-3][0-9])$/i.test(state.age) /* age range 1-139 */
     };
   },
@@ -178,35 +180,6 @@ var FormComp = React.createClass({
             </div>
         </div>
       </form>
-    )
-  }
-});
-
-var FormInputComp = React.createClass({
-  handleChange: function(e) {
-    this.props.onChange(e);
-  },
-  handleBlur: function() {
-    this.props.onBlur(this.props.id);
-  },  
-  render: function() {
-    var value = this.props.value;
-    var className = "form-control";
-    if (this.props.startValid) {
-      className = (
-        this.props.valid ? "form-control has-success" : "form-control has-error"
-      );
-    }
-
-    return (
-    <input
-      id={this.props.id}
-      type="text"
-      className={className}
-      value={value}
-      onChange={this.handleChange}
-      onBlur={this.handleBlur}
-      placeholder={this.props.placeholder} />
     )
   }
 });
