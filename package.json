@@ -15,6 +15,7 @@
     "react": "~0.13.2"
   },
   "scripts": {
+    "preinstall": "npm install http-server -g",
     "start": "browserify js/app.js -o js/bundle.js -d"
   },
   "browserify": {
